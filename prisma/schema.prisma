@@ -1,0 +1,92 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Provider {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  phone      String
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  listings   Listing[]
+}
+
+model Listing {
+  id           String   @id @default(uuid())
+  providerId   String
+  categoryId   String
+  name         String
+  description  String   @db.Text
+  city         String
+  priceMin     Int
+  priceMax     Int
+  whatsapp     String
+  email        String
+  instagram    String
+  status       Status   @default(PENDING)
+  rejectionNote String? @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Hubungan ke tabel lain
+  provider     Provider @relation(fields: [providerId], references: [id])
+  category     Category @relation(fields: [categoryId], references: [id])
+  media        Media[]
+  views        ListingView[]
+}
+
+model Media {
+  id        String  @id @default(uuid())
+  listingId String
+  url       String
+  isPrimary Boolean @default(false)
+
+  listing   Listing @relation(fields: [listingId], references: [id])
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  name     String
+  slug     String    @unique
+  icon     String
+  order    Int
+  listings Listing[]
+}
+
+model ListingView {
+  id        String   @id @default(uuid())
+  listingId String
+  type      ViewType
+  createdAt DateTime @default(now())
+
+  listing   Listing  @relation(fields: [listingId], references: [id])
+}
+
+model Admin {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+}
+
+// Enum sesuai PRD
+enum Status {
+  PENDING
+  APPROVED
+  REJECTED
+  SUSPENDED
+}
+
+enum ViewType {
+  PAGE_VIEW
+  WHATSAPP_CLICK
+  INSTAGRAM_CLICK
+}
