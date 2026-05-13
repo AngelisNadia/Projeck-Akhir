@@ -1,11 +1,16 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
+const cors = require('cors'); // Tambah ini
 const authRoutes = require('./routes/auth');
 const listingRoutes = require('./routes/listing'); 
 
 dotenv.config();
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3000', 
+}));
 
 app.use(express.json());
 app.use(cookieParser());
