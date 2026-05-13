@@ -23,7 +23,7 @@ const updateProvider = async (req, res) => {
     const { name, phone } = req.body;
 
     const updated = await prisma.provider.update({
-      where: { id: parseInt(id) },
+      where: { id: id },
       data: { name, phone }
     });
 
