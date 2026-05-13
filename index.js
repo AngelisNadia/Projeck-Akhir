@@ -1,16 +1,17 @@
 const express = require('express');
-const cookieParser = require('cookie-parser'); // Tambah ini
+const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
+const listingRoutes = require('./routes/listing'); 
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(cookieParser()); // Tambah ini supaya bisa baca cookie
+app.use(cookieParser());
 
-// Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/listings', listingRoutes); 
 
 app.get('/', (req, res) => {
   res.send('Backend Bantu Nyata Is Running!');
