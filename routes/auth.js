@@ -1,16 +1,25 @@
-const express = require('express');
+import express from 'express';
+import { 
+  registerCtrl, 
+  loginCtrl, 
+  logoutCtrl, 
+  verifyEmailCtrl 
+} from '../controllers/authController.js'; 
+import { 
+  getProvidersCtrl, 
+  updateProviderCtrl, 
+  deleteProviderCtrl 
+} from '../controllers/providerController.js'; 
+
 const router = express.Router();
 
-const authController = require('../controllers/authController');
-const providerController = require('../controllers/provider.controller'); 
+router.post('/register', registerCtrl.handle);
+router.post('/login', loginCtrl.handle);
+router.post('/logout', logoutCtrl.handle);
+router.get('/verify-email/:token', verifyEmailCtrl.handle);
 
-router.post('/register', authController.register);
-router.post('/login', authController.login);
-router.post('/logout', authController.logout);
-router.get('/verify-email/:token', authController.verifyEmail);
+router.get('/all', getProvidersCtrl.handle);
+router.put('/update/:id', updateProviderCtrl.handle);
+router.delete('/delete/:id', deleteProviderCtrl.handle);
 
-router.get('/all', providerController.getProviders);
-router.put('/update/:id', providerController.updateProvider);
-router.delete('/delete/:id', providerController.deleteProvider);
-
-module.exports = router;
+export default router;

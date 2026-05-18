@@ -1,7 +1,8 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+const JWT_SECRET = process.env.JWT_SECRET || 'bantu-nyata';
 
-const authenticateToken = (req, res, next) => {
-  const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
+export const authenticateToken = (req, res, next) => {
+  const token = req.cookies?.token || req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
     return res.status(401).json({ 
@@ -11,7 +12,7 @@ const authenticateToken = (req, res, next) => {
   }
 
   try {
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    const verified = jwt.verify(token, JWT_SECRET);
     req.user = verified; 
     next(); 
   } catch (err) {
@@ -21,5 +22,3 @@ const authenticateToken = (req, res, next) => {
     });
   }
 };
-
-module.exports = { authenticateToken };
