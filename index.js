@@ -5,6 +5,7 @@ import cors from 'cors';
 import authRoutes from './routes/auth.js';
 import listingRoutes from './routes/listing.js'; 
 import adminRoutes from './routes/admin.js';
+import categoryRoutes from './routes/category.js';
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,7 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/listings', listingRoutes); 
 app.use('/api/admin', adminRoutes);
+app.use('/api/categories', categoryRoutes);
 
 app.get('/', (req, res) => {
     res.send('Backend Bantu Nyata Is Running!');
