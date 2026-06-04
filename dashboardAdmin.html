@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bantu Nyata — Dashboard Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+        }
+
+        .menu-nav {
+            width: 100%;
+            border: none;
+            padding: 16px 18px;
+            border-radius: 18px;
+            background-color: transparent;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-nav:hover {
+            background: linear-gradient(90deg, #ffb531, #ff5e6d);
+            transform: translateX(4px);
+            color: white;
+        }
+
+        .menu-nav.active {
+            background: white;
+            color: #1b2559;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+
+
+        /* HOVER BAGIAN AKUN PROVIDER POJOK KANAN ATAS */
+        .akun-provider:hover{
+            transform:translateY(-3px);
+        }
+
+        /* STATISTIK KUNJUNG PROFIL, IG, WA */
+        .card-custom{
+            background:white;
+            border-radius:30px;
+            padding:28px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.04);
+            height:100%;
+            transition:0.3s ease;
+        }
+
+        .card-custom:hover {
+            transform: translateY(-4px);
+        }
+
+        .card-judul {
+            font-size: 15px;
+            font-weight: 700;
+            color: #7a7a7a;
+            margin-bottom: 18px;
+        }
+
+        .statis-value {
+            font-size: 38px;
+            font-weight: 800;
+            color: #1b2559;
+        }
+
+        .statis-desc {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .info-item {
+            background: #fafafa;
+            border: 2px solid #eeeeee;
+            border-radius: 22px;
+            padding: 22px;
+            transition: 0.3s ease;
+        }
+
+        .info-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .info-item span {
+            display: block;
+            font-size: 13px;
+            color: #8d8d8d;
+            margin-bottom: 8px;
+        }
+
+        .info-item strong {
+            color: #1b2559;
+            font-size: 15px;
+        }
+
+        @media(max-width:992px) {
+
+            body {
+                padding: 20px;
+            }
+
+            .dashboard-main {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .content {
+                padding: 30px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+        }
+
+        /* EDIT PROFILE SECTION */
+        .edit-profile {
+            display: none;
+            background: white;
+            border-radius: 30px;
+            padding: 35px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+
+        .edit-profile.active {
+            display: block;
+        }
+
+        .edit-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #1b2559;
+            margin-bottom: 25px;
+        }
+
+        .edit-form .form-control {
+            border: 2px solid #eee;
+            border-radius: 18px;
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            font-size: 15px;
+            box-shadow: none;
+        }
+
+        .edit-form .form-control:focus {
+            border-color: #57d4c7;
+        }
+
+        .save-btn {
+            background: linear-gradient(90deg, #57d4c7, #42bfb3);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* MANAJEMEN KATEGORI */
+        .section-box{
+            background: #fff;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+
+        .section-title{
+            font-size: 24px;
+            font-weight: 800;
+            color: #1b2559;
+        }
+
+        .btn-add{
+            border: none;
+            background: linear-gradient(90deg,#57d4c7,#42bfb3);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .kategori-grid{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .kategori-card{
+            background: #fafafa;
+            border: 2px solid #eeeeee;
+            border-radius: 20px;
+            padding: 15px;
+            transition: 0.3s ease;
+        }
+
+        .kategori-card:hover{
+            transform: translateY(-3px);
+        }
+
+        .kategori-icon{
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: rgba(87,212,199,0.15);
+            color: #57d4c7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .kategori-title{
+            font-size: 16px;
+            font-weight: 700;
+            color: #1b2559;
+            margin-bottom: 8px;
+        }
+
+        .kategori-desc{
+            font-size: 13px;
+            color: #7b7b7b;
+            line-height: 1.5;
+            margin-bottom: 15px;
+
+            /* supaya tinggi kartu sama */
+            min-height: 30px;
+            min-width: 30px;
+        }
+
+        .kategori-action{
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-mini{
+            border: none;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-edit{
+            background: #e7f8f6;
+            color: #42bfb3;
+        }
+
+        .btn-delete{
+            background: #ffe4e4;
+            color: #d63939;
+
+                .pratinjau-card{
+            background:#fafafa;
+            border:2px solid #eeeeee;
+            border-radius:25px;
+            padding:30px;
+        }
+
+        .pratinjau-judul{
+            display:inline-block;
+            padding:8px 16px;
+            background:#57d4c7;
+            color:white;
+            border-radius:50px;
+            font-size:12px;
+            font-weight:700;
+            margin-bottom:20px;
+        }
+
+        .pratinjau-item{
+            margin-bottom:18px;
+            color:#666;
+        }
+
+        .pratinjau-item strong{
+            color:#1b2559;
+        }
+
+        .kategori-input{
+            border:2px solid #eeeeee;
+            border-radius:18px;
+            padding:14px 18px;
+            box-shadow:none;
+        }
+
+        .kategori-input:focus{
+            border-color:#57d4c7;
+            box-shadow:none;
+        }
+
+        .form-label{
+            color:#1b2559;
+            margin-bottom:8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-wrap" style="background: linear-gradient(180deg,#57d4c7,#42bfb3);  padding: 18px; min-height: calc(100vh - 80px); box-shadow: 0 15px 50px rgba(0,0,0,0.08);">
+        <div class="dashboard-main d-flex" style="min-height: calc(100vh - 36px);">
+
+            <!-- BAGIAN NAVIGASI SEBELAH KIRI -->
+            <div class="navigasi text-white d-flex flex-column" style="width: 280px; background: linear-gradient(180deg, #57d4c7, #42bfb3); padding: 35px 25px;">
+                <div>
+                    <div class="logo mb-4" style="font-size: 28px; font-weight: 800; padding-left: 20px;">
+                        Bantu Nyata
+                    </div>
+                    <button class="menu-nav active" id="btnBeranda" onclick="showBeranda()">
+                        <i class="bi bi-house-fill"></i> Beranda
+                    </button>
+                    <button class="menu-nav" id="btnListing" onclick="showListing()">
+                        <i class="bi bi-card-checklist"></i> Manajemen Listing
+                    </button>
+                    <button class="menu-nav" id="btnKategori" onclick="showKategori()">
+                        <i class="bi bi-grid-fill"></i> Manajemen Kategori
+                    </button>
+                        <a href="index.html" class="menu-nav text-decoration-none">
+                            <i class="bi bi-box-arrow-left"></i> Keluar
+                        </a>
+                </div>
+
+                <!-- BAGIAN BULATAN AKUN SAYA DIBAWAH KIRI -->
+                <div class="kotak-akun d-flex align-items-center gap-3 rounded-pill" style="background-color: rgba(255,255,255,0.15); padding: 18px;">
+                    <div class="akun-img fs-2 fw-semibold bg-white rounded-pill d-flex justify-content-center align-items-center" style="width: 55px; height: 55px; color: #57d4c7;">
+                        B
+                    </div>
+                    <div>
+                        <div class="akun-name fw-semibold" style="font-size:15px;">
+                            Bantu_Nyata
+                        </div>
+                        <div class="akun-label opacity-75" style="font-size:13px;">
+                            Admin
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content flex-fill" style=" padding: 45px; overflow-y:auto; background-color: #f7f4ef; border-radius: 38px; margin: 18px 18px 18px 0; height:auto;">
+
+                <!-- BAGIAN BULATAN AKUN PROVIDER USAHA ATAS KANAN -->
+                <div class="judul-content d-flex align-items-center mb-4 flex-wrap">
+                    <div>
+                        <h1 class="fw-bold mb-1" style="font-size:36px; color:#1b2559;">
+                            Dashboard Admin
+                        </h1>
+                        <p class="m-0" style="color:#7b7b7b;">
+                            Kelola listing usaha dan kategori platform.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- BAGIAN STATISTIK TOTAL LISTING, DLL -->
+            <div id="berandaSection">     
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card-custom">
+                            <div class="card-judul">
+                                Total Listing
+                            </div>
+                            <div class="statis-value">
+                                2.521
+                            </div>
+                            <div class="statis-desc">
+                                Semua listing usaha aktif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-custom">
+                            <div class="card-judul">
+                                Antrian Listing
+                            </div>
+                            <div class="statis-value">
+                                251
+                            </div>
+                            <div class="statis-desc">
+                                Menunggu persetujuan admin
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-custom">
+                            <div class="card-judul">
+                                Listing Ditolak
+                            </div>
+                            <div class="statis-value">
+                                293
+                            </div>
+                            <div class="statis-desc">
+                                Listing yang tidak lolos verifikasi
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <!-- BAGIAN INFORMASI LISTING -->
+            <div id="listingSection" style="display:block;">
+                <div class="listing-card bg-white" style="border-radius: 30px; padding: 35px; margin-top: 35px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);">
+                    <div class="listing-header d-flex justify-content-between" style="margin-bottom: 25px; flex-wrap: wrap; gap: 20px;">
+                        <div class="listing-judul fw-bold" style="font-size: 26px; color: #1b2559;">
+                            Listing Usaha
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center my-4 w-100">
+                        <!-- BAGIAN KOTAK SEARCH -->
+                        <div class="position-relative" style="flex: 1;">
+                            <i class="bi bi-search" style="position:absolute; left:18px; top:50%; transform:translateY(-50%); color:#999;"></i>
+                            <input type="text" placeholder="Cari nama usaha / email provider..." style="width:100%; border:none; background:#f7f7f7; padding:14px 18px 14px 48px; border-radius:18px; outline:none;">
+                        </div>
+                        <!-- FILTER -->
+                        <select class="position-relative border border-0" style="width: 235px; background:#f7f7f7; padding:14px 20px; border-radius:18px; outline:none; color:#1b2559; font-weight:600;">
+                            <option>Semua Listing</option>
+                            <option>Listing Aktif</option>
+                            <option>Listing Proses</option>
+                            <option>Listing Ditolak</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr style="color:#7b7b7b;">
+                                    <th>Nama Usaha</th>
+                                    <th>Email Provider</th>
+                                    <th>Kategori</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong style="color:#1b2559;">Studio Visual Kreatif</strong></td>
+                                    <td>studio@email.com</td>
+                                    <td>Desain</td>
+                                    <td><span style="background:#dff8ef;color:#1da56f;padding:8px 16px;border-radius:50px;font-size:13px;font-weight:700;">Aktif</span></td>
+                                    <td><button class="btn btn-sm text-white" style="background:linear-gradient(90deg,#57d4c7,#42bfb3);border-radius:14px;padding:10px 16px;" onclick="showDetail('Aktif')">Detail</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="color:#1b2559;">Clean House Service</strong></td>
+                                    <td>cleanhouse@gmail.com</td>
+                                    <td>Kebersihan</td>
+                                    <td><span style="background:#fff3d8;color:#e59b00;padding:8px 16px;border-radius:50px;font-size:13px;font-weight:700;">Proses</span></td>
+                                    <td><button class="btn btn-sm text-white" style="background:linear-gradient(90deg,#57d4c7,#42bfb3);border-radius:14px;padding:10px 16px;" onclick="showDetail('Proses')">Detail</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="color:#1b2559;">Edu Smart Course</strong></td>
+                                    <td>edukursus@mail.com</td>
+                                    <td>Pendidikan</td>
+                                    <td><span style="background:#ffe4e4;color:#d63939;padding:8px 16px;border-radius:50px;font-size:13px;font-weight:700;">Ditolak</span></td>
+                                    <td><button class="btn btn-sm text-white" style="background:linear-gradient(90deg,#57d4c7,#42bfb3);border-radius:14px;padding:10px 16px;" onclick="showDetail('Ditolak')">Detail</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="color:#1b2559;">Pixel Photography</strong></td>
+                                    <td>pixelphoto@gmail.com</td>
+                                    <td>Fotografi</td>
+                                    <td><span style="background:#dff8ef;color:#1da56f;padding:8px 16px;border-radius:50px;font-size:13px;font-weight:700;">Aktif</span></td>
+                                    <td><button class="btn btn-sm text-white" style="background:linear-gradient(90deg,#57d4c7,#42bfb3);border-radius:14px;padding:10px 16px;">Detail</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="color:#1b2559;">Jasa Ketik Cepat</strong></td>
+                                    <td>ketikcepat@mail.com</td>
+                                    <td>Jasa Lainnya</td>
+                                    <td><span style="background:#fff3d8;color:#e59b00;padding:8px 16px;border-radius:50px;font-size:13px;font-weight:700;">Proses</span></td>
+                                    <td><button class="btn btn-sm text-white" style="background:linear-gradient(90deg,#57d4c7,#42bfb3);border-radius:14px;padding:10px 16px;">Detail</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong style="color:#1b2559;">Bright Design Studio</strong></td>
+                                    <td>brightdesign@gmail.com</td>
+                                    <td>Desain</td>
+                                    <td><span style="background:#dff8ef;color:#1da56f;padding:8px 16px;border-radius:50px;font-size:13px;font-weight:700;">Aktif</span></td>
+                                    <td><button class="btn btn-sm text-white" style="background:linear-gradient(90deg,#57d4c7,#42bfb3);border-radius:14px;padding:10px 16px;">Detail</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+                <!-- MANAJEMEN KATEGORI -->
+                 
+                <div class="section-box kategori-section" id="kategoriSection" style="display:none;">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                        <div class="section-title m-0">Manajemen Kategori</div>
+                        <button class="btn-add" data-bs-toggle="modal" data-bs-target="#kategoriModal">
+                            + Tambah Kategori
+                        </button>
+                    </div>
+                    <div class="kategori-grid">
+                        <div class="kategori-card">
+                            <div class="kategori-icon"><i class="bi bi-book-fill"></i></div>
+                            <div class="kategori-title">Pendidikan</div>
+                            <div class="kategori-desc">
+                                Pendidikan
+                            </div>
+                            <div class="kategori-action">
+                                <button class="btn-mini btn-edit">
+                                    Edit
+                                </button>
+                                <button class="btn-mini btn-delete">
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="kategori-card">
+                            <div class="kategori-icon"><i class="bi bi-stars"></i></div>
+                            <div class="kategori-title">Kebersihan</div>
+                            <div class="kategori-desc">Kategori jasa kebersihan rumah dan kantor.</div>
+                            <div class="kategori-action">
+                                <button class="btn-mini btn-edit">
+                                    Edit
+                                </button>
+                                <button class="btn-mini btn-delete">
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="kategori-card">
+                            <div class="kategori-icon"><i class="bi bi-brush-fill"></i></div>
+                            <div class="kategori-title">Desain</div>
+                            <div class="kategori-desc">Kategori jasa desain grafis dan visual.</div>
+                            <div class="kategori-action">
+                                <button class="btn-mini btn-edit">
+                                    Edit
+                                </button>
+                                <button class="btn-mini btn-delete">
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="kategori-card"><div class="kategori-icon"><i class="bi bi-camera-fill"></i></div>
+                            <div class="kategori-title">Fotografi</div>
+                            <div class="kategori-desc">Kategori jasa foto dan videografi.</div>
+                            <div class="kategori-action">
+                                <button class="btn-mini btn-edit">
+                                    Edit
+                                </button>
+                                <button class="btn-mini btn-delete">
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="kategori-card">
+                            <div class="kategori-icon"><i class="bi bi-code-slash"></i></div>
+                            <div class="kategori-title">Rumah Tangga</div>
+                            <div class="kategori-desc">Kategori jasa website dan aplikasi.</div>
+                            <div class="kategori-action">
+                                <button class="btn-mini btn-edit">
+                                    Edit
+                                </button>
+                                <button class="btn-mini btn-delete">
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="kategori-card">
+                            <div class="kategori-icon"><i class="bi bi-calendar-event-fill"></i></div>
+                            <div class="kategori-title">Event Organizer</div>
+                            <div class="kategori-desc">Kategori jasa acara dan event organizer.</div>
+                            <div class="kategori-action">
+                                <button class="btn-mini btn-edit">
+                                    Edit
+                                </button>
+                                <button class="btn-mini btn-delete">
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content border-0" style="border-radius:30px;">
+                <div class="modal-header border-0 p-4">
+                    <h4 class="fw-bold m-0" style="color:#1b2559;">
+                        Detail Listing Usaha
+                    </h4>
+                    <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-body px-4 pb-4">
+                    <div class="pratinjau-card">
+                        <div class="pratinjau-judul">
+                            VERIFIKASI BISNIS
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Nama Usaha :</strong><br>
+                            Studio Visual Kreatif
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Deskripsi :</strong><br>
+                            Jasa desain grafis dan branding profesional.
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Kategori :</strong><br>
+                            Desain
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Alamat :</strong><br>
+                            Jl. Ahmad Yani No.10
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Kecamatan :</strong><br>
+                            Kartoharjo
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Kabupaten / Kota :</strong><br>
+                            Madiun
+                        </div>
+                        <hr>
+                        <div class="pratinjau-item">
+                            <strong>Layanan :</strong><br>
+                            Desain Logo, Branding, UI/UX
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Harga :</strong><br>
+                            Mulai Rp250.000
+                        </div>
+                        <hr>
+                        <div class="pratinjau-item">
+                            <strong>WhatsApp :</strong><br>
+                            08123456789
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Telepon :</strong><br>
+                            0351-123456
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Email :</strong><br>
+                            studio@email.com
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Instagram :</strong><br>
+                            @studiovisual
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Facebook :</strong><br>
+                            Studio Visual Kreatif
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Sosial Media :</strong><br>
+                            @studiovisual
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 px-4 pb-4" id="actionButtons">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TAMBAH KATEGORI -->
+    <div class="modal fade" id="kategoriModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content border-0" style="border-radius:30px;">
+                <div class="modal-header border-0 p-4">
+                    <h4 class="fw-bold m-0" style="color:#1b2559;">
+                        Tambah Kategori
+                    </h4>
+                    <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-body px-4 pb-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            Nama Kategori
+                        </label>
+                        <input type="text"
+                            class="form-control kategori-input"
+                            placeholder="Masukkan nama kategori">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            Deskripsi
+                        </label>
+                        <textarea rows="4"
+                            class="form-control kategori-input"
+                            placeholder="Masukkan deskripsi kategori"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 px-4 pb-4">
+                    <button type="button"
+                        class="btn btn-light px-4 py-2 rounded-pill"
+                        data-bs-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="button"
+                        class="btn text-white px-4 py-2 rounded-pill"
+                        style="background:linear-gradient(90deg,#57d4c7,#42bfb3);">
+                        Simpan Kategori
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setActiveMenu(id) {
+            document.querySelectorAll(".menu-nav").forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            document.getElementById(id).classList.add("active");
+        }
+
+        function showBeranda() {
+            setActiveMenu("btnBeranda");
+
+            document.getElementById("berandaSection").style.display = "block";
+            document.getElementById("listingSection").style.display = "block";
+            document.getElementById("kategoriSection").style.display = "none";
+        }
+
+        function showListing() {
+            setActiveMenu("btnListing");
+
+            document.getElementById("berandaSection").style.display = "none";
+            document.getElementById("listingSection").style.display = "block";
+            document.getElementById("kategoriSection").style.display = "none";
+        }
+
+        function showKategori() {
+            setActiveMenu("btnKategori");
+
+            document.getElementById("berandaSection").style.display = "none";
+            document.getElementById("listingSection").style.display = "none";
+            document.getElementById("kategoriSection").style.display = "block";
+        }
+
+        function showDetail(status){
+
+    const actionButtons =
+        document.getElementById("actionButtons");
+
+    if(status === "Proses"){
+
+        actionButtons.innerHTML = `
+            <button class="btn text-white"
+                style="background:#28a745;border-radius:14px;padding:10px 24px;">
+                Approve
+            </button>
+
+            <button class="btn text-white"
+                style="background:#dc3545;border-radius:14px;padding:10px 24px;">
+                Reject
+            </button>
+        `;
+
+    }else{
+
+        actionButtons.innerHTML = "";
+    }
+
+    const modal =
+        new bootstrap.Modal(
+            document.getElementById("detailModal")
+        );
+
+    modal.show();
+}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
