@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Listing Usaha</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans',sans-serif;
+        }
+
+        body{
+            background-color: #f7f4ef;
+            min-height: 100vh;
+            padding: 50px 20px;
+            color: #1d1d1d;
+        }
+
+        .progress-garis{
+            top: 28px;
+            left: 100px;
+            right: 100px;
+            height: 4px;
+        }
+
+        /* BAGIAN STEP 1,2,3,4,5 YANG BULAT BULAT */
+        .step-bulat{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 120px;
+        }
+
+            .step{
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                background-color: white;
+                border: 3px solid #d8d8d8;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 16px;
+                font-weight: 700;
+                color: #b2b2b2;
+                transition: 0.4s ease;
+            }
+
+            /* BAGIAN STEP 1,2,3,4,5 YANG BULAT BULAT ACTIVE/KETIKA SUDAH DIKLIK */
+            .step.active{
+                background-color: #57d4c7;
+                border-color: #57d4c7;
+                color: white;
+                box-shadow: 0 8px 20px rgba(87,212,199,0.3);
+            }
+
+            .step-text{
+                margin-top: 14px;
+                font-size: 14px;
+                font-weight: 600;
+                color: #9c9c9c;
+                text-align: center;
+                transition: 0.3s ease;
+            }
+
+            .step-bulat.active .step-text{
+                color: #111827;
+            }
+
+        /* BAGIAN SELURUH KOTAK YANG AKAN MEMBUNGKUS SELURUH FORM */
+
+        .form-step{
+            display: none;
+        }
+
+        .form-step.active{
+            display: block;
+            animation: fade .4s ease;
+        }
+
+        @keyframes fade{
+            from{
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to{
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-title{
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+            .step-title h2{
+                font-size: 34px;
+                font-weight: 800;
+                color: #1b2559;
+                margin-bottom: 12px;
+            }
+
+            .step-title p{
+                color: #6f6f6f;
+                line-height: 1.7;
+                max-width: 700px;
+                margin: auto;
+            }
+
+        .form-control,
+        .form-select{
+            border: 2px solid #ececec;
+            border-radius: 18px;
+            padding: 16px 18px;
+            font-size: 15px;
+            margin-bottom: 24px;
+            box-shadow: none;
+        }
+
+            .form-control:focus,
+            .form-select:focus{
+                border-color: #57d4c7;
+            }
+
+        textarea{
+            resize: none;
+        }
+
+        .btn-wrap{
+            margin-top: 45px;
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+        }
+
+            .btn-custom{
+                border: none;
+                border-radius: 50px;
+                padding: 15px 38px;
+                font-size: 14px;
+                font-weight: 700;
+                transition: 0.3s ease;
+                text-decoration: none;
+            }
+
+            .btn-custom:hover{
+                transform: translateY(-3px);
+            }
+
+            .btn-prev{
+                background-color: #f1f1f1;
+                color: #666;
+            }
+
+            .btn-next{
+                background: linear-gradient(90deg,#ffb531,#ff5e6d);
+                color: white;
+                box-shadow: 0 10px 25px rgba(255,94,109,0.25);
+            }
+
+        /* BAGIAN HALAMAN PRATINJAU */
+        .pratinjau-card{
+            background-color: #fafafa;
+            border: 2px solid #eeeeee;
+            border-radius: 30px;
+            padding: 40px;
+        }
+
+            .pratinjau-judul{
+                display: inline-block;
+                padding: 8px 18px;
+                background-color: #57d4c7;
+                color: white;
+                border-radius: 50px;
+                font-size: 12px;
+                font-weight: 700;
+                margin-bottom: 20px;
+            }
+
+            .pratinjau-card h3{
+                font-size: 32px;
+                font-weight: 800;
+                color: #1b2559;
+                margin-bottom: 30px;
+            }
+
+            .pratinjau-item{
+                margin-bottom: 22px;
+                line-height: 1.8;
+                color: #666;
+            }
+
+            .pratinjau-item strong{
+                color: #1b2559;
+            }
+
+            hr{
+                margin:28px 0;
+                border-color: #ececec;
+            }
+        
+        /* BAGIAN SUKSES PENDAFTARAN LISTING */
+        .sukses-box{
+            text-align: center;
+            padding: 30px 10px;
+        }
+
+            .sukses-icon{
+                width: 110px;
+                height: 110px;
+                border-radius: 50%;
+                background: linear-gradient(90deg,#57d4c7,#4ec7bb);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                font-size: 50px;
+                margin: auto;
+                margin-bottom: 35px;
+                box-shadow: 0 15px 35px rgba(87,212,199,0.35);
+            }
+
+            .sukses-box h2{
+                font-size: 38px;
+                font-weight: 800;
+                color: #1b2559;
+                margin-bottom: 24px;
+            }
+
+            .sukses-box p{
+                color: #6d6d6d;
+                line-height: 1.9;
+                max-width: 650px;
+                margin: auto;
+            }
+
+        @media(max-width:768px){
+            .main-card{
+                padding: 30px;
+            }
+
+            .step-bulat{
+                width: auto;
+            }
+
+            .step-text{
+                font-size: 11px;
+            }
+
+            .progress-line{
+                left: 50px;
+                right: 50px;
+            }
+
+            .title h1{
+                font-size: 30px;
+            }
+
+            .step-title h2{
+                font-size: 28px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="wrap container m-auto" style="max-width: 1100px;">
+        <div class="judul text-center" style="margin-bottom: 55px;">
+            <h1 style="margin-bottom: 12px; font-size: 40px; font-weight: 800; color:#101828">PENDAFTARAN LISTING USAHA</h1>
+            <p style="color: #7b7b7b; font-size: 15px;">Lengkapi data usaha kamu sebelum dipublikasikan di platform.</p>
+        </div>
+
+        <div class="progress-wrap w-100 position-relative mb-5 px-4">
+            <div class="progress-garis position-absolute overflow-hidden rounded-pill z-1" style="background-color: #dddddd; transform:translateY(-50%);">
+                <div class="progress-fill h-100" id="progressFill" style="background: linear-gradient(90deg,#6edbd0,#4ccfc1); transition: 0.4s ease;"></div>
+            </div>
+            <div class="progress-step d-flex justify-content-between position-relative z-2">
+                <div class="step-bulat active">
+                    <div class="step active">1</div>
+                    <div class="step-text">Profil</div>
+                </div>
+                <div class="step-bulat">
+                    <div class="step">2</div>
+                    <div class="step-text">Layanan</div>
+                </div>
+                <div class="step-bulat">
+                    <div class="step">3</div>
+                    <div class="step-text">Kontak</div>
+                </div>
+                <div class="step-bulat">
+                    <div class="step">4</div>
+                    <div class="step-text">Pratinjau</div>
+                </div>
+                <div class="step-bulat">
+                    <div class="step">5</div>
+                    <div class="step-text">Selesai</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-card bg-white" style="border-radius: 35px; padding: 55px; box-shadow: 0 10px 40px rgba(0,0,0,0.05);">
+            <form action="" method="POST">
+                <div class="form-step active">
+                    <div class="step-title">
+                        <h2>Profil Usaha</h2>
+                        <p>
+                            Tambahkan informasi dasar usaha kamu agar pengguna dapat mengenal bisnis yang kamu miliki.
+                        </p>
+                    </div>
+                    <input type="text" class="form-control" id="namaUsaha" name="namaUsaha" placeholder="Nama Usaha">
+                    <textarea rows="5" class="form-control" id="deskripsiUsaha" name="deskripsiUsaha" placeholder="Deskripsi Usaha"></textarea>
+                    <select class="form-select" id="kategoriUsaha" name="kategoriUsaha">
+                        <option selected disabled>Pilih Kategori</option>
+                        <option>Kuliner</option>
+                        <option>Teknologi</option>
+                        <option>Fashion</option>
+                        <option>Kesehatan</option>
+                        <option>Jasa</option>
+                    </select>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="kecamatanUsaha" name="kecamatan" placeholder="Kecamatan">
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="kotaUsaha" name="kota" placeholder="Kabupaten / Kota">
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" id="alamatUsaha" name="alamat" placeholder="Alamat Lengkap">
+                    <div class="btn-wrap">
+                        <button type="button" class="btn-custom btn-next next-btn">
+                            Selanjutnya
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <div class="step-title">
+                        <h2>Detail Layanan</h2>
+                        <p>
+                            Tambahkan daftar layanan dan harga untuk ditampilkan kepada pelanggan.
+                        </p>
+                    </div>
+                    <input type="text" class="form-control" id="layananUsaha" name="layanan" placeholder="Daftar Layanan">
+                    <input type="text" class="form-control" id="hargaUsaha" name="harga" placeholder="Harga">
+                    <div class="btn-wrap">
+                        <button type="button" class="btn-custom btn-prev prev-btn">
+                            Sebelumnya
+                        </button>
+                        <button type="button" class="btn-custom btn-next next-btn">
+                            Selanjutnya
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <div class="step-title">
+                        <h2>Kontak Usaha</h2>
+                        <p>
+                            Pastikan pelanggan dapat menghubungi usaha kamu dengan mudah.
+                        </p>
+                    </div>
+                    <input type="text" class="form-control" id="waUsaha" name="noWa" placeholder="Nomor WhatsApp">
+                    <input type="text" class="form-control" id="telpUsaha" name="noTelp" placeholder="Nomor Telepon">
+                    <input type="email" class="form-control" id="emailUsaha" name="email" placeholder="Email Bisnis">
+                    <input type="text" class="form-control" id="igUsaha" name="instagram" placeholder="Instagram">
+                    <input type="text" class="form-control" id="fbUsaha" name="facebook" placeholder="Facebook">
+                    <input type="text" class="form-control" id="sosmedUsaha" name="sosialMedia" placeholder="TikTok / Sosial Media Lain">
+                    <div class="btn-wrap">
+                        <button type="button" class="btn-custom btn-prev prev-btn">
+                            Sebelumnya
+                        </button>
+                        <button type="button" class="btn-custom btn-next next-btn">
+                            Pratinjau
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <div class="step-title">
+                        <h2>Pratinjau Listing</h2>
+                        <p>
+                            Periksa kembali semua data sebelum dikirim ke admin.
+                        </p>
+                    </div>
+                    <div class="pratinjau-card">
+                        <div class="pratinjau-judul">
+                            VERIFIKASI BISNIS
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Nama Usaha :</strong><br>
+                            <span id="praUsaha"></span>
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Deskripsi :</strong><br>
+                            <span id="praDeskripsi"></span>
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Kategori :</strong><br>
+                            <span id="praKategori"></span>
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Alamat :</strong><br>
+                            <span id="praAlamat"></span>
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Kecamatan :</strong><br>
+                            <span id="praKecamatan"></span>
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Kabupaten / Kota :</strong><br>
+                            <span id="praKota"></span>
+                        </div>
+                        <hr>
+                        <div class="pratinjau-item">
+                            <strong>Layanan :</strong><br>
+                            <span id="praLayanan"></span>
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Harga :</strong><br>
+                            <span id="praHarga"></span>
+                        </div>
+                        <hr>
+                        <div class="pratinjau-item">
+                            <strong>WhatsApp :</strong><br>
+                            <span id="praNoWa"></span>
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Telepon :</strong><br>
+                            <span id="praTelp"></span>
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Email :</strong><br>
+                            <span id="praEmail"></span>
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Instagram :</strong><br>
+                            <span id="praIg"></span>
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Facebook :</strong><br>
+                            <span id="praFb"></span>
+                        </div>
+                        <div class="pratinjau-item">
+                            <strong>Sosial Media :</strong><br>
+                            <span id="praSosmed"></span>
+                        </div>
+                    </div>
+                    <div class="btn-wrap">
+                        <button type="button" class="btn-custom btn-prev prev-btn">
+                            Sebelumnya
+                        </button>
+                        <button class="btn-custom btn-next next-btn" type="submit" name="submit">
+                            Kirim Listing
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <div class="sukses-box">
+                        <div class="sukses-icon">
+                            ✓
+                        </div>
+                        <h2>Listing Berhasil Dikirim</h2>
+                        <p>
+                            Data listing usaha kamu berhasil dikirim.<br>
+                            Notifikasi akan dikirim melalui email bisnis kamu.
+                        </p>
+                        <div class="btn-wrap">
+                            <a href="dashboardProvider copy 2.html" class="btn-custom btn-next">
+                                Kembali ke Halaman Utama
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const formSteps = document.querySelectorAll(".form-step");
+        const nextBtns = document.querySelectorAll(".next-btn");
+        const prevBtns = document.querySelectorAll(".prev-btn");
+        const progressFill = document.getElementById("progressFill");
+
+        const steps = document.querySelectorAll(".step");
+        const stepBoxes = document.querySelectorAll(".step-bulat");
+
+        let currentStep = 0;
+
+        function updateStep(){
+
+            formSteps.forEach((form,index)=>{
+                if(index === currentStep){
+                    form.classList.add("active");
+                }else{
+                    form.classList.remove("active");
+                }
+            });
+
+            steps.forEach((step,index)=>{
+                if(index <= currentStep){
+                    step.classList.add("active");
+                    stepBoxes[index].classList.add("active");
+                }else{
+                    step.classList.remove("active");
+                    stepBoxes[index].classList.remove("active");
+                }
+            });
+
+            progressFill.style.width = `${currentStep * 25}%`;
+
+            if(currentStep === 3){
+
+                document.getElementById("praUsaha").innerText =
+                document.getElementById("namaUsaha").value;
+
+                document.getElementById("praDeskripsi").innerText =
+                document.getElementById("deskripsiUsaha").value;
+
+                document.getElementById("praKategori").innerText =
+                document.getElementById("kategoriUsaha").value;
+
+                document.getElementById("praAlamat").innerText =
+                document.getElementById("alamatUsaha").value;
+
+                document.getElementById("praKecamatan").innerText =
+                document.getElementById("kecamatanUsaha").value;
+
+                document.getElementById("praKota").innerText =
+                document.getElementById("kotaUsaha").value;
+
+                document.getElementById("praLayanan").innerText =
+                document.getElementById("layananUsaha").value;
+
+                document.getElementById("praHarga").innerText =
+                document.getElementById("hargaUsaha").value;
+
+                document.getElementById("praNoWa").innerText =
+                document.getElementById("waUsaha").value;
+
+                document.getElementById("praTelp").innerText =
+                document.getElementById("telpUsaha").value;
+
+                document.getElementById("praEmail").innerText =
+                document.getElementById("emailUsaha").value;
+
+                document.getElementById("praIg").innerText =
+                document.getElementById("igUsaha").value;
+
+                document.getElementById("praFb").innerText =
+                document.getElementById("fbUsaha").value;
+
+                document.getElementById("praSosmed").innerText =
+                document.getElementById("sosmedUsaha").value;
+            }
+        }
+
+        nextBtns.forEach((btn)=>{
+            btn.addEventListener("click",(e)=>{
+                e.preventDefault();
+
+                if(currentStep < formSteps.length - 1){
+                    currentStep++;
+                    updateStep();
+                }
+            });
+        });
+
+        prevBtns.forEach((btn)=>{
+            btn.addEventListener("click",(e)=>{
+                e.preventDefault();
+
+                if(currentStep > 0){
+                    currentStep--;
+                    updateStep();
+                }
+            });
+        });
+
+        updateStep();
+    </script>
+</body>
+</html>
